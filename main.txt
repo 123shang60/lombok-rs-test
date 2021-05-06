@@ -1,0 +1,159 @@
+#![feature(prelude_import)]
+#[prelude_import]
+use std::prelude::rust_2018::*;
+#[macro_use]
+extern crate std;
+use lombok::*;
+use std::time::SystemTime;
+struct A {
+    a: BS,
+    b: i64,
+}
+impl A {
+    pub fn set_a(&mut self, a: BS) {
+        self.a = a
+    }
+    pub fn set_b(&mut self, b: i64) {
+        self.b = b
+    }
+}
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl ::core::default::Default for A {
+    #[inline]
+    fn default() -> A {
+        A {
+            a: ::core::default::Default::default(),
+            b: ::core::default::Default::default(),
+        }
+    }
+}
+struct ABuilder {
+    a: BS,
+    b: i64,
+}
+impl A {
+    pub fn builder() -> ABuilder {
+        ABuilder {
+            a: ::core::default::Default::default(),
+            b: ::core::default::Default::default(),
+        }
+    }
+}
+impl ABuilder {
+    pub fn a(&mut self, a: BS) -> &mut Self {
+        self.a = a;
+        self
+    }
+    pub fn b(&mut self, b: i64) -> &mut Self {
+        self.b = b;
+        self
+    }
+    pub fn build(&self) -> A {
+        A {
+            a: self.a.clone(),
+            b: self.b.clone(),
+        }
+    }
+}
+struct BS {
+    a: String,
+}
+impl BS {
+    pub fn set_a(&mut self, a: String) {
+        self.a = a
+    }
+}
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl ::core::clone::Clone for BS {
+    #[inline]
+    fn clone(&self) -> BS {
+        match *self {
+            BS { a: ref __self_0_0 } => BS {
+                a: ::core::clone::Clone::clone(&(*__self_0_0)),
+            },
+        }
+    }
+}
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl ::core::default::Default for BS {
+    #[inline]
+    fn default() -> BS {
+        BS {
+            a: ::core::default::Default::default(),
+        }
+    }
+}
+struct BSBuilder {
+    a: String,
+}
+impl BS {
+    pub fn builder() -> BSBuilder {
+        BSBuilder {
+            a: ::core::default::Default::default(),
+        }
+    }
+}
+impl BSBuilder {
+    pub fn a(&mut self, a: String) -> &mut Self {
+        self.a = a;
+        self
+    }
+    pub fn build(&self) -> BS {
+        BS { a: self.a.clone() }
+    }
+}
+fn main() {
+    let str = std::fs::read_to_string("/Users/liuhanwen/gotest/http-test/test.json").unwrap();
+    let b = BS { a: str };
+    let mut vec = ::alloc::vec::Vec::new();
+    let sy_time = SystemTime::now();
+    for _ in 0..1000 {
+        let a = A { a: b.clone(), b: 0 };
+        vec.push(a);
+    }
+    {
+        ::std::io::_print(::core::fmt::Arguments::new_v1(
+            &["", ",", "\n"],
+            &match (
+                &"原生消耗用时",
+                &SystemTime::now()
+                    .duration_since(sy_time)
+                    .unwrap()
+                    .as_millis(),
+            ) {
+                (arg0, arg1) => [
+                    ::core::fmt::ArgumentV1::new(arg0, ::core::fmt::Display::fmt),
+                    ::core::fmt::ArgumentV1::new(arg1, ::core::fmt::Display::fmt),
+                ],
+            },
+        ));
+    };
+    let mut vec = ::alloc::vec::Vec::new();
+    let sy_time = SystemTime::now();
+    for _ in 0..1000 {
+        let mut a = A::default();
+        a.set_a(b.clone());
+        a.set_b(0);
+        vec.push(a);
+    }
+    {
+        ::std::io::_print(::core::fmt::Arguments::new_v1(
+            &["", ",", "\n"],
+            &match (
+                &"lombok setter消耗用时",
+                &SystemTime::now()
+                    .duration_since(sy_time)
+                    .unwrap()
+                    .as_millis(),
+            ) {
+                (arg0, arg1) => [
+                    ::core::fmt::ArgumentV1::new(arg0, ::core::fmt::Display::fmt),
+                    ::core::fmt::ArgumentV1::new(arg1, ::core::fmt::Display::fmt),
+                ],
+            },
+        ));
+    };
+}
